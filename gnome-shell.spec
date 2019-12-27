@@ -1,6 +1,6 @@
 Name:           gnome-shell
 Version:        3.30.1
-Release:        4
+Release:        5
 Summary:        Core user interface functions for the GNOME 3 desktop
 Group:          User Interface/Desktops
 License:        GPLv2+
@@ -27,7 +27,6 @@ Requires:       ibus accountsservice-libs gdm control-center python3
 Requires:       switcheroo-control geoclue2 libgweather bolt
 
 Provides:       desktop-notification-daemon
-Recommends:     xdg-desktop-portal-gtk
 
 %description
 The GNOME Shell redefines user interactions with the GNOME desktop. In particular,
@@ -121,5 +120,11 @@ glib-compile-schemas --allow-any-name %{_datadir}/glib-2.0/schemas &> /dev/null 
 %{_mandir}/man1/%{name}.1.gz
 
 %changelog
+* Fri Dec 27 2019 Jiangping Hu<hujiangping@huawei.com> - 3.30.1-5
+- Type:bugfix
+- Id:NA
+- SUG:NA
+- DESC:remove the xdg-desktop-portal-gtk in recommends
+
 * Wed Nov 27 2019 openEuler Buildteam<buildteam@openeuler.org> - 3.30.1-4
 - Package Init
