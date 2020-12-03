@@ -1,6 +1,6 @@
 Name:           gnome-shell
 Version:        3.30.1
-Release:        5
+Release:        6
 Summary:        Core user interface functions for the GNOME 3 desktop
 Group:          User Interface/Desktops
 License:        GPLv2+
@@ -11,6 +11,7 @@ Patch1: gnome-shell-favourite-apps-firefox.patch
 Patch2: 0001-endSessionDialog-Immediately-add-buttons-to-the-dial.patch
 Patch3: 0002-endSessionDialog-Support-rebooting-into-the-bootload.patch
 Patch4: 0001-keyboardManager-Avoid-idempotent-calls-to-meta_backe.patch
+Patch5: 0001-Include-the-libcroco-sources-directly-under-src-st-c.patch
 
 BuildRequires:  meson git ibus-devel chrpath dbus-glib-devel desktop-file-utils
 BuildRequires:  evolution-data-server-devel gcr-devel gjs-devel glib2-devel
@@ -120,6 +121,10 @@ glib-compile-schemas --allow-any-name %{_datadir}/glib-2.0/schemas &> /dev/null 
 %{_mandir}/man1/%{name}.1.gz
 
 %changelog
+* Thu Dec 03 2020 wangxiao<wangxia65@huawei.com> -3.30.1-6
+- move the libcroco sources directly under src/st
+  remove the libcroco dependency from the meson.build files
+
 * Fri Dec 27 2019 Jiangping Hu<hujiangping@huawei.com> - 3.30.1-5
 - Type:bugfix
 - Id:NA
