@@ -1,6 +1,6 @@
 Name:           gnome-shell
 Version:        3.30.1
-Release:        5
+Release:        6
 Summary:        Core user interface functions for the GNOME 3 desktop
 Group:          User Interface/Desktops
 License:        GPLv2+
@@ -11,18 +11,19 @@ Patch1: gnome-shell-favourite-apps-firefox.patch
 Patch2: 0001-endSessionDialog-Immediately-add-buttons-to-the-dial.patch
 Patch3: 0002-endSessionDialog-Support-rebooting-into-the-bootload.patch
 Patch4: 0001-keyboardManager-Avoid-idempotent-calls-to-meta_backe.patch
+Patch5: 0001-Include-the-libcroco-sources-directly-under-src-st-c.patch
 
 BuildRequires:  meson git ibus-devel chrpath dbus-glib-devel desktop-file-utils
 BuildRequires:  evolution-data-server-devel gcr-devel gjs-devel glib2-devel
 BuildRequires:  gobject-introspection json-glib-devel upower-devel mesa-libGL-devel
 BuildRequires:  NetworkManager-libnm-devel polkit-devel startup-notification-devel
 BuildRequires:  sassc gstreamer1-devel gtk3-devel gettext libcanberra-devel
-BuildRequires:  libcroco-devel python3-devel libXfixes-devel librsvg2-devel
+BuildRequires:  python3-devel libXfixes-devel librsvg2-devel
 BuildRequires:  mutter-devel pulseaudio-libs-devel control-center gtk-doc
 
 Requires:       gnome-desktop3 gobject-introspection gjs gtk3 libnma librsvg2
 Requires:       json-glib mozilla-filesystem mutter upower polkit glib2
-Requires:       gsettings-desktop-schemas libcroco gstreamer1 at-spi2-atk
+Requires:       gsettings-desktop-schemas gstreamer1 at-spi2-atk
 Requires:       ibus accountsservice-libs gdm control-center python3
 Requires:       switcheroo-control geoclue2 libgweather bolt
 
@@ -120,6 +121,10 @@ glib-compile-schemas --allow-any-name %{_datadir}/glib-2.0/schemas &> /dev/null 
 %{_mandir}/man1/%{name}.1.gz
 
 %changelog
+* Thu Dec 03 2020 wangxiao<wangxia65@huawei.com> -3.30.1-6
+- move the libcroco sources directly under src/st
+  remove the libcroco dependency from the meson.build files
+
 * Fri Dec 27 2019 Jiangping Hu<hujiangping@huawei.com> - 3.30.1-5
 - Type:bugfix
 - Id:NA
