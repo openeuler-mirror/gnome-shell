@@ -1,36 +1,33 @@
 Name:           gnome-shell
-Version:        3.30.1
-Release:        7
+Version:        3.38.4
+Release:        1
 Summary:        Core user interface functions for the GNOME 3 desktop
 Group:          User Interface/Desktops
 License:        GPLv2+
 URL:            https://wiki.gnome.org/Projects/GnomeShell
-Source0:        http://download.gnome.org/sources/gnome-shell/3.30/%{name}-%{version}.tar.xz
+Source0:        http://download.gnome.org/sources/gnome-shell/3.38/%{name}-%{version}.tar.xz
 
 Patch1: gnome-shell-favourite-apps-firefox.patch
-Patch2: 0001-endSessionDialog-Immediately-add-buttons-to-the-dial.patch
-Patch3: 0002-endSessionDialog-Support-rebooting-into-the-bootload.patch
-Patch4: 0001-keyboardManager-Avoid-idempotent-calls-to-meta_backe.patch
-Patch5: 0001-Include-the-libcroco-sources-directly-under-src-st-c.patch
-Patch6: CVE-2020-17489-pre1.patch
-Patch7: CVE-2020-17489-pre2.patch
-Patch8: CVE-2020-17489.patch
 
 BuildRequires:  meson git ibus-devel chrpath dbus-glib-devel desktop-file-utils
 BuildRequires:  evolution-data-server-devel gcr-devel gjs-devel glib2-devel
 BuildRequires:  gobject-introspection json-glib-devel upower-devel mesa-libGL-devel
 BuildRequires:  NetworkManager-libnm-devel polkit-devel startup-notification-devel
 BuildRequires:  sassc gstreamer1-devel gtk3-devel gettext libcanberra-devel
-BuildRequires:  python3-devel libXfixes-devel librsvg2-devel
+BuildRequires:  python3-devel libXfixes-devel librsvg2-devel asciidoc
 BuildRequires:  mutter-devel pulseaudio-libs-devel control-center gtk-doc
+BuildRequires:  bash-completion gnome-autoar-devel gnome-desktop3-devel 
+BuildRequires:  mesa-libEGL-devel systemd-devel python3
+BuildRequires:  pkgconfig(libpipewire-0.3) >= 0.3.0 gnome-bluetooth-libs-devel
 
 Requires:       gnome-desktop3 gobject-introspection gjs gtk3 libnma librsvg2
-Requires:       json-glib mozilla-filesystem mutter upower polkit glib2
-Requires:       gsettings-desktop-schemas gstreamer1 at-spi2-atk
-Requires:       ibus accountsservice-libs gdm control-center python3
-Requires:       switcheroo-control geoclue2 libgweather bolt
+Requires:       json-glib mozilla-filesystem mutter upower polkit glib2 gdm-libs
+Requires:       gsettings-desktop-schemas gstreamer1 at-spi2-atk gnome-bluetooth
+Requires:       ibus accountsservice-libs gdm control-center python3 gnome-settings-daemon
+Requires:       switcheroo-control geoclue2 libgweather bolt gnome-session-xsession
+Requires:	geoclue2-libs pipewire-gstreamer
 
-Provides:       desktop-notification-daemon
+Provides:       desktop-notification-daemon PolicyKit-authentication-agent
 
 %description
 The GNOME Shell redefines user interactions with the GNOME desktop. In particular,
@@ -55,7 +52,7 @@ Help files for %{name}
 
 
 %build
-%meson
+%meson -Dextensions_app=false
 %meson_build
 
 
@@ -67,7 +64,6 @@ Help files for %{name}
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Shell.desktop
-desktop-file-validate %{buildroot}%{_datadir}/applications/gnome-shell-extension-prefs.desktop
 desktop-file-validate %{buildroot}%{_datadir}/applications/evolution-calendar.desktop
 
 
@@ -82,48 +78,60 @@ glib-compile-schemas --allow-any-name %{_datadir}/glib-2.0/schemas &> /dev/null 
 %files -f %{name}.lang
 %license COPYING
 %doc README.md
-%{_bindir}/gnome-shell
-%{_bindir}/gnome-shell-extension-tool
-%{_bindir}/gnome-shell-perf-tool
-%{_bindir}/gnome-shell-extension-prefs
+%{_bindir}/gnome-*
 %{_datadir}/glib-2.0/schemas/*.xml
 %{_datadir}/glib-2.0/schemas/00_org.gnome.shell.gschema.override
+%{_datadir}/applications/org.gnome.Shell.Extensions.desktop
 %{_datadir}/applications/org.gnome.Shell.desktop
-%{_datadir}/applications/gnome-shell-extension-prefs.desktop
 %{_datadir}/applications/evolution-calendar.desktop
 %{_datadir}/applications/org.gnome.Shell.PortalHelper.desktop
 %{_datadir}/gnome-control-center/keybindings/50-gnome-shell-system.xml
 %{_datadir}/gnome-shell/
+
 %{_datadir}/dbus-1/services/org.gnome.Shell.CalendarServer.service
+%{_datadir}/dbus-1/services/org.gnome.Shell.Extensions.service
 %{_datadir}/dbus-1/services/org.gnome.Shell.HotplugSniffer.service
+%{_datadir}/dbus-1/services/org.gnome.Shell.Notifications.service
 %{_datadir}/dbus-1/services/org.gnome.Shell.PortalHelper.service
+%{_datadir}/dbus-1/services/org.gnome.Shell.Screencast.service
 %{_datadir}/dbus-1/interfaces/org.gnome.Shell.Extensions.xml
+%{_datadir}/dbus-1/interfaces/org.gnome.Shell.Introspect.xml
 %{_datadir}/dbus-1/interfaces/org.gnome.Shell.PadOsd.xml
 %{_datadir}/dbus-1/interfaces/org.gnome.Shell.Screencast.xml
 %{_datadir}/dbus-1/interfaces/org.gnome.Shell.Screenshot.xml
 %{_datadir}/dbus-1/interfaces/org.gnome.ShellSearchProvider.xml
 %{_datadir}/dbus-1/interfaces/org.gnome.ShellSearchProvider2.xml
-%{_userunitdir}/gnome-shell.service
-%{_userunitdir}/gnome-shell-wayland.target
-%{_userunitdir}/gnome-shell-x11.target
+
+%{_userunitdir}/org.gnome.Shell-disable-extensions.service
+%{_userunitdir}/org.gnome.Shell.target
+%{_userunitdir}/org.gnome.Shell@wayland.service
+%{_userunitdir}/org.gnome.Shell@x11.service
 %{_sysconfdir}/xdg/autostart/gnome-shell-overrides-migration.desktop
+
 %dir %{_datadir}/xdg-desktop-portal/portals/
 %{_datadir}/xdg-desktop-portal/portals/gnome-shell.portal
+%{_datadir}/bash-completion/completions/gnome-extensions
+%{_datadir}/icons/hicolor/scalable/apps/org.gnome.Shell.Extensions.svg
+%{_datadir}/icons/hicolor/symbolic/apps/org.gnome.Shell.Extensions-symbolic.svg
 %{_libdir}/gnome-shell/
-%{_libdir}/mozilla/plugins/*.so
 %{_libexecdir}/gnome-shell-calendar-server
 %{_libexecdir}/gnome-shell-perf-helper
 %{_libexecdir}/gnome-shell-hotplug-sniffer
 %{_libexecdir}/gnome-shell-portal-helper
 %{_libexecdir}/gnome-shell-overrides-migration.sh
-%dir %{_datadir}/GConf
-%dir %{_datadir}/GConf/gsettings
-%{_datadir}/GConf/gsettings/gnome-shell-overrides.convert
+%{_datadir}/GConf/*
 
 %files help
 %{_mandir}/man1/%{name}.1.gz
+%{_mandir}/man1/gnome-extensions.1.gz
 
 %changelog
+* Mon May 31 2021 weijin deng <weijin.deng@turbolinux.com.cn> - 3.38.4-1
+- Upgrade to 3.38.4
+- Update Version, Release, Source0, BuildRequires, Requires
+- Delete patches which existed in current version, modify one patch
+- Update stage 'build', 'check', 'files'
+
 * Tue Mar 30 2021 wangyue<wangyue92@huawei.com> - 3.30.1-7
 - fix CVE-2020-17489
 
