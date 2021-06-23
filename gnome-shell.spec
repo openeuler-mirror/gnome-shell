@@ -1,6 +1,6 @@
 Name:           gnome-shell
 Version:        3.38.4
-Release:        1
+Release:        2
 Summary:        Core user interface functions for the GNOME 3 desktop
 Group:          User Interface/Desktops
 License:        GPLv2+
@@ -21,11 +21,11 @@ BuildRequires:  mesa-libEGL-devel systemd-devel python3
 BuildRequires:  pkgconfig(libpipewire-0.3) >= 0.3.0 gnome-bluetooth-libs-devel
 
 Requires:       gnome-desktop3 gobject-introspection gjs gtk3 libnma librsvg2
-Requires:       json-glib mozilla-filesystem mutter upower polkit glib2 gdm-libs
+Requires:       json-glib mozilla-filesystem mutter upower polkit glib2
 Requires:       gsettings-desktop-schemas gstreamer1 at-spi2-atk gnome-bluetooth
 Requires:       ibus accountsservice-libs gdm control-center python3 gnome-settings-daemon
 Requires:       switcheroo-control geoclue2 libgweather bolt gnome-session-xsession
-Requires:	geoclue2-libs pipewire-gstreamer
+Requires:	geoclue2-libs pipewire xdg-desktop-portal-gtk >= 1.8.0
 
 Provides:       desktop-notification-daemon PolicyKit-authentication-agent
 
@@ -126,6 +126,11 @@ glib-compile-schemas --allow-any-name %{_datadir}/glib-2.0/schemas &> /dev/null 
 %{_mandir}/man1/gnome-extensions.1.gz
 
 %changelog
+* Wed Jun 23 2021 weijin deng <weijin.deng@turbolinux.com.cn> - 3.38.4-2
+- Delete requires gdm-libs which gdm contains it
+- Use pipewire replace pipewire-gstreamer which pipewire contains it
+- Add xdg-desktop-portal-gtk for launching flatpak apps etc
+
 * Mon May 31 2021 weijin deng <weijin.deng@turbolinux.com.cn> - 3.38.4-1
 - Upgrade to 3.38.4
 - Update Version, Release, Source0, BuildRequires, Requires
