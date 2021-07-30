@@ -1,6 +1,6 @@
 Name:           gnome-shell
 Version:        3.38.4
-Release:        2
+Release:        3
 Summary:        Core user interface functions for the GNOME 3 desktop
 Group:          User Interface/Desktops
 License:        GPLv2+
@@ -9,7 +9,7 @@ Source0:        http://download.gnome.org/sources/gnome-shell/3.38/%{name}-%{ver
 
 Patch1: gnome-shell-favourite-apps-firefox.patch
 
-BuildRequires:  meson git ibus-devel chrpath dbus-glib-devel desktop-file-utils
+BuildRequires:  meson ibus-devel chrpath dbus-glib-devel desktop-file-utils
 BuildRequires:  evolution-data-server-devel gcr-devel gjs-devel glib2-devel
 BuildRequires:  gobject-introspection json-glib-devel upower-devel mesa-libGL-devel
 BuildRequires:  NetworkManager-libnm-devel polkit-devel startup-notification-devel
@@ -48,7 +48,7 @@ Help files for %{name}
 
 
 %prep
-%autosetup -n %{name}-%{version} -p1 -Sgit
+%autosetup -n %{name}-%{version} -p1
 
 
 %build
@@ -126,6 +126,9 @@ glib-compile-schemas --allow-any-name %{_datadir}/glib-2.0/schemas &> /dev/null 
 %{_mandir}/man1/gnome-extensions.1.gz
 
 %changelog
+* Fri Jul 30 2021 chenyanpanHW <chenyanpan@huawei.com> - 3.38.4-3
+- DESC: delete -Sgit from %autosetup, and delete BuildRequires git
+
 * Wed Jun 23 2021 weijin deng <weijin.deng@turbolinux.com.cn> - 3.38.4-2
 - Delete requires gdm-libs which gdm contains it
 - Use pipewire replace pipewire-gstreamer which pipewire contains it
