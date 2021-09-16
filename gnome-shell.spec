@@ -1,6 +1,6 @@
 Name:           gnome-shell
 Version:        3.38.4
-Release:        3
+Release:        4
 Summary:        Core user interface functions for the GNOME 3 desktop
 Group:          User Interface/Desktops
 License:        GPLv2+
@@ -61,6 +61,14 @@ Help files for %{name}
 
 %find_lang %{name}
 
+chrpath -d %{buildroot}%{_bindir}/gnome-shell
+chrpath -d %{buildroot}%{_libdir}/%{name}/libst-1.0.so
+chrpath -d %{buildroot}%{_libdir}/%{name}/libgnome-shell.so
+chrpath -d %{buildroot}%{_libdir}/%{name}/libgnome-shell-menu.so
+mkdir -p %{buildroot}/etc/ld.so.conf.d
+echo "%{_bindir}/%{name}" > %{buildroot}/etc/ld.so.conf.d/%{name}-%{_arch}.conf
+echo "%{_libdir}/%{name}" >> %{buildroot}/etc/ld.so.conf.d/%{name}-%{_arch}.conf
+
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Shell.desktop
@@ -68,10 +76,11 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/evolution-calendar.de
 
 
 %preun
+/sbin/ldconfig
 glib-compile-schemas --allow-any-name %{_datadir}/glib-2.0/schemas &> /dev/null ||:
 
-
 %posttrans
+/sbin/ldconfig
 glib-compile-schemas --allow-any-name %{_datadir}/glib-2.0/schemas &> /dev/null ||:
 
 
@@ -120,12 +129,16 @@ glib-compile-schemas --allow-any-name %{_datadir}/glib-2.0/schemas &> /dev/null 
 %{_libexecdir}/gnome-shell-portal-helper
 %{_libexecdir}/gnome-shell-overrides-migration.sh
 %{_datadir}/GConf/*
+%config(noreplace) /etc/ld.so.conf.d/*
 
 %files help
 %{_mandir}/man1/%{name}.1.gz
 %{_mandir}/man1/gnome-extensions.1.gz
 
 %changelog
+* Tue Sep 07 2021 chenchen <chen_aka_jan@163.com> - 3.38.4-4
+- del rpath from some binaries and bin
+
 * Fri Jul 30 2021 chenyanpanHW <chenyanpan@huawei.com> - 3.38.4-3
 - DESC: delete -Sgit from %autosetup, and delete BuildRequires git
 
