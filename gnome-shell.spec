@@ -1,6 +1,6 @@
 Name:           gnome-shell
 Version:        3.30.1
-Release:        8
+Release:        10
 Summary:        Core user interface functions for the GNOME 3 desktop
 Group:          User Interface/Desktops
 License:        GPLv2+
@@ -15,6 +15,8 @@ Patch5: 0001-Include-the-libcroco-sources-directly-under-src-st-c.patch
 Patch6: CVE-2020-17489-pre1.patch
 Patch7: CVE-2020-17489-pre2.patch
 Patch8: CVE-2020-17489.patch
+Patch9: CVE-2019-3820-1.patch
+Patch10: CVE-2019-3820-2.patch
 
 BuildRequires:  meson git ibus-devel chrpath dbus-glib-devel desktop-file-utils
 BuildRequires:  evolution-data-server-devel gcr-devel gjs-devel glib2-devel
@@ -28,7 +30,7 @@ Requires:       gnome-desktop3 gobject-introspection gjs gtk3 libnma librsvg2
 Requires:       json-glib mozilla-filesystem mutter upower polkit glib2
 Requires:       gsettings-desktop-schemas gstreamer1 at-spi2-atk
 Requires:       ibus accountsservice-libs gdm control-center python3
-Requires:       switcheroo-control geoclue2 libgweather bolt
+Requires:       switcheroo-control geoclue2 libgweather bolt xdg-utils
 
 Provides:       desktop-notification-daemon
 
@@ -124,6 +126,12 @@ glib-compile-schemas --allow-any-name %{_datadir}/glib-2.0/schemas &> /dev/null 
 %{_mandir}/man1/%{name}.1.gz
 
 %changelog
+* Tue Sep 28 2021 weijin deng <weijin.deng@turbolinux.com.cn> - 3.30.1-10
+- fix CVE-2019-3820
+
+* Tue Jul 27 2021 caodongxia<caodongxia@huawei.com> - 3.30.1-9
+- add install require xdg-utils
+
 * Tue Mar 30 2021 wangyue<wangyue92@huawei.com> - 3.30.1-8
 - fix CVE-2020-17489
 
